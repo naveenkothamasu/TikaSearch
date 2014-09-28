@@ -13,23 +13,29 @@ public class ParseTsv {
 	public static void readTsv() {
 		try
 		{
-			BufferedReader br=new BufferedReader(new FileReader("computrabajo-ar-20121221.tsv"));
+			BufferedReader br=new BufferedReader(new FileReader("D:\\shared-ubuntu-11.10\\TikaSearch\\computrabajo-ar-20121106.tsv"));
 			String line=null;
 			int i=0;
 			while((line=br.readLine())!=null)
 			{
 				i++;
+				System.out.println("<html>");
+				System.out.println("<body>");
+				System.out.println("<table>");
+				
+				System.out.println("<tr>");
 				//System.out.println("Line : "+line);
 				String[] job=line.split("\t");
 				//determineFields(job);
 				//System.out.print("Tabs :");
 				for(int j=0;j<job.length;j++)
 				{
-					if(i==2)
-					System.out.print(j+")"+job[j]+"\n");
+					System.out.print("<td>"+job[j]+"</td>");
 				}
-				System.out.println();
-				
+				System.out.println("</tr>");
+				System.out.println("</table>");
+				System.out.println("</body>");
+				System.out.println("</html>");
 			}
 			br.close();
 		}

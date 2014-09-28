@@ -1,8 +1,8 @@
 postedDate
 location1
 department
-extrafield
 title
+extrafield
 salary
 start
 duration

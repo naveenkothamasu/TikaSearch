@@ -1,37 +1,43 @@
-package tsv;
+package org.apache.tika.parser.tsv;
 
-import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.tika.exception.TikaException;
 import org.apache.tika.sax.BodyContentHandler;
 import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
 public class JSONTableContentHandler extends BodyContentHandler{
 	
 	String json=null;
 	private ArrayList<String> headers = new ArrayList<String>();
+	private OutputStreamWriter fileWriter;
+	private int currentElemPos = -1;
 	
-	private static int currentElemPos = 0;
+	private int headerPos = -1;
 	
-	private int headerPos = 0;
-	public JSONTableContentHandler(ContentHandler delegate) {
-		super(delegate);
-		// TODO Auto-generated constructor stub
-	}
 
-	public void parseToJSON(String xhtml) throws IOException,SAXException,TikaException{
+	public JSONTableContentHandler (String fileName) {
+		try {
+			//fileWriter = new FileWriter(new OutputStreamWriter(new FileOutputStream(fileName+".json"), "UTF-8"));
+			fileWriter = new OutputStreamWriter(new FileOutputStream(fileName+".json"), "ISO-8859-1");  
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+	}
+	/*public void parseToJSON(String fileName) throws IOException,SAXException,TikaException{
+		
+		fileWriter = new FileWriter(fileName+".json");
 		//BodyContentHandler handler = new BodyContentHandler();
         //InputStream stream = JSONTableContentHandler.class.getResourceAsStream("/mnt/572/TikaSearch/TSVParser/test1.xhtml");
-        InputStream stream =new FileInputStream("/mnt/572/TikaSearch/TSVParser/test1.xhtml");
+        InputStream stream =new FileInputStream(fileName+".xhtml");
         //AutoDetectParser parser=new AutoDetectParser();
         //Metadata metadata=new Metadata();
         //XHTMLContentHandler handler=new XHTMLContentHandler(new BodyContentHandler(), metadata);
@@ -48,27 +54,50 @@ public class JSONTableContentHandler extends BodyContentHandler{
         {
         	e.printStackTrace();
         }
-	}
+	}*/
 	
 	@Override
 	public void startDocument() {
-		System.out.println("{\"job details\": [{");
+		try {
+			fileWriter.write("{\"job details\": [{");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public void endDocument() throws SAXException {
-		System.out.println("}]}");
+		try {
+			fileWriter.write("}]}");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally{
+			try {
+				fileWriter.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	@Override
 	public void startElement(String namespaceURI, String localName,
 			String qName, Attributes atts) throws SAXException {
 		
-		if(headerPos == 21){
-			System.out.println("\""+ headers.get(currentElemPos)+"\":");
-			++currentElemPos;
+		//System.out.println(qName);
+		if(qName.equals("th")){
+			++headerPos;
+		}else if(qName.equals("td")){
+			try {
+				++currentElemPos;
+				fileWriter.write("\""+ headers.get(currentElemPos)+"\":");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		if(headerPos==20)
+	/*	if(headerPos==20)
 		{
 			headerPos++;
-		}
+		}*/
 	}
 	@Override
 	public void characters(char[] ch, int start, int length)
@@ -80,14 +109,18 @@ public class JSONTableContentHandler extends BodyContentHandler{
 			sb.append(ch[i]);
 			//System.out.print(ch[i]);
 		}
-		if(headerPos  < 20){
+		//System.out.println(sb.toString());
+		if(headerPos  < 20 && currentElemPos == -1){
 			headers.add(sb.toString());
-			headerPos++;
 		}else{
-			if(currentElemPos == 20){
-				System.out.println("\""+sb.toString()+"\"");
-			}else{
-				System.out.println("\""+sb.toString()+"\",");
+			try {
+				if(currentElemPos == 20){
+					fileWriter.write("\""+sb.toString()+"\"");
+				}else{
+						fileWriter.write("\""+sb.toString()+"\",");
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		

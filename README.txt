@@ -7,5 +7,6 @@ Context extraction and search using Apache Tika
 5. lattitude and longitude are floatig point numbers
 
 
+
 Command to convert xhtml to json in TIKA
 java -jar tika-app-1.6.jar -j computrabajo-ar-20121106.tsv_0.xhtml > tempXHTMLtoJSON.json

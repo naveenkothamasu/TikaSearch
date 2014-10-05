@@ -2,8 +2,9 @@ import glob
 import os
 def executecommand(file):
      command = "tsvtojson -t input1.tsv   -j " + file +   "  -c col.txt -o employmentjobs"
-     print command 
-inputpath = '/Users/srikanthgandupalli/csci572/sampledata/*.tsv'
+     print command
+     os.system(command) 
+inputpath = '/Users/srikanthgandupalli/Desktop/Courses/csci572/tika-1.6/input/*.tsv'
 outputdir = '/Users/srikanthgandupalli/csci572/code/outputdata/'   
 files=glob.glob(inputpath)
 outfilename = "output"

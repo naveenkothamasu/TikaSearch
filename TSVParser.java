@@ -153,7 +153,7 @@ public class TSVParser extends AbstractParser {
 		xhtml.characters("<table>");
 		xhtml.characters("<tr>");
 		String col = null;
-		File fileDirs = new File("/mnt/572/TikaSearch/col.txt");
+		File fileDirs = new File("columns_header.txt");
 		//BufferedReader br = new BufferedReader(new FileReader("/mnt/572/TikaSearch/col.txt"));
 		BufferedReader br = new BufferedReader(
 				new InputStreamReader(new FileInputStream(fileDirs), "UTF-8"));

@@ -12,7 +12,7 @@ def getMD5(file):
 md5Map = { }
 urlMap = { }
 unique_count = 0
-inputpath = "/Users/srikanthgandupalli/Desktop/Courses/csci572/tika-1.6/outputs/*.json"
+inputpath = "*.json"
 for file in glob.glob(inputpath):
 	print file
 	md5 = getMD5(file)
